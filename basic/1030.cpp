@@ -21,13 +21,15 @@ int main()
     for(int i = 0; i < N; i++)
         cin >> A[i];
     sort(A, A + N);
-    int a1 = 0, a2 = N - 1;
-    while(A[a2] > A[a1] * p && a1 < a2) { // 双指针
-        if(A[a2] / A[a1 + 1] < A[a2 - 1] / A[a1])
-            a1++;
-        else    
-            a2--;
-    }
-    cout << a2 - a1 + 1;
+    int ret = 0, tmp = 0;
+    for(int i = 0; i < N; i++)
+        for(int j = i + ret; j < N; j++) { // 减少运行时间，之后的循环只需验证比ret大的数
+            if(A[i] * p >= A[j]) {
+                tmp = j - i + 1;
+                if(tmp > ret) ret = tmp;
+            }
+            else break; // 直接下一层循环
+        }
+    cout << ret;
     return 0;
 }
