@@ -11,48 +11,27 @@ Address Data Next
 输出格式：
 对每个测试用例，顺序输出反转后的链表，其上每个结点占一行，格式与输入相同。
 */
-#include<iostream>
-#include<vector>
-#include<string>
-#include<algorithm>
+#include <iostream>
+#include <algorithm>
 using namespace std;
 
-struct node
-{
-    int Address, Data, Next;
-};
-
-int main()
-{
-    int Head, N, K;
-    scanf("%d%d%d", &Head, &N, &K); 
-    vector<node> list1(N);
-    vector<node> list2;
-    for(int i = 0; i < N; i++) 
-        scanf("%d%d%d", &list1[i].Address, &list1[i].Data, &list1[i].Next); // 减少运行时间
-    for(int i = 0; i < N; i++) // 找到头结点
-        if(list1[i].Address == Head)
-            list2.push_back(list1[i]);
-    int j = 0;
-    while(list2[j].Next != -1) // 先排序
-        for(int i = 0; i < N; i++) 
-            if(list1[i].Address == list2[j].Next) {
-                list2.push_back(list1[i]);
-                j++;
-                break;
-            }
-    vector<node>::iterator it = list2.begin(); // 迭代器
-    N = list2.size(); // 考虑到有游离节点
-    int temp = N;
-    while(temp >= K) {
-        reverse(it, it + K); // 反转结点
-        it += K;
-        temp -= K;
+int main() {
+    int first, k, n, temp;
+    cin >> first >> n >> k;
+    int data[100005], next[100005], list[100005]; // 下标为地址
+    for (int i = 0; i < n; i++) {
+        cin >> temp; // 地址
+        cin >> data[temp] >> next[temp]; // 地址对应的数值与下地址
     }
-    for(int i = 0; i < N - 1; i++) {
-        list2[i].Next = list2[i + 1].Address;
-        printf("%05d %d %05d\n", list2[i].Address, list2[i].Data, list2[i].Next);
+    int sum = 0; // 可能有游离的结点
+    while (first != -1) {
+        list[sum++] = first; // list按从头到尾顺序记录地址
+        first = next[first];
     }
-    printf("%05d %d -1", list2.back().Address, list2.back().Data); // 输入最后一个结点
+    for (int i = 0; i < (sum - sum % k); i += k) // 末尾不足k个元素不反转
+        reverse(list + i, list + i + k);
+    for (int i = 0; i < sum - 1; i++)
+        printf("%05d %d %05d\n", list[i], data[list[i]], list[i + 1]); // list[i + 1]即为下一个输出的元素的地址
+    printf("%05d %d -1", list[sum - 1], data[list[sum - 1]]);
     return 0;
 }
