@@ -7,30 +7,23 @@ int main()
     int N;
     cin >> N;
     int sum = 0;
-    int A[100000], B[100000];
-    for(int i = 0; i < N; i++)
-        cin >> A[i];
+    int max = 0;
+    int A[100000], B[100000], C[100000];
     for(int i = 0; i < N; i++) {
-        int flag = 1;
-        for(int j = 0; j < i; j++)
-            if(A[j] > A[i]) {
-                flag = 0;
-                break;
-            }
-        if(flag) 
-            for(int j = i + 1; j < N; j++)
-                if(A[j] < A[i]) {
-                    flag = 0;
-                    break;
-                }
-        if(flag) 
-            B[sum++] = A[i];
+        cin >> A[i];
+        B[i] = A[i]; // A的副本
+    }
+    sort(A, A + N); // 排序
+    for(int i = 0; i < N; i++) {
+        if(A[i] == B[i] && max < B[i]) // B[i]位置不变且之前数的最大值小于B[i]
+            C[sum++] = B[i];
+        max = max > B[i] ? max : B[i];
     }
     printf("%d\n", sum);
-    sort(B, B + sum);
     for(int i = 0; i < sum; i++) {
         if(i != 0) printf(" ");
-        printf("%d", B[i]);
+        printf("%d", C[i]);
     }
+    printf("\n");
     return 0;
 }
